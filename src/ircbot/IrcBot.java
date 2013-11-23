@@ -113,7 +113,11 @@ public class IrcBot {
 				
 				switch(command_str) {
 					case "MODE":
-						mode = postfix;
+						if (Channel.isChannel(args[2]) && channelMap.containsKey(args[2])) {
+							channelMap.get(args[2]).userMode(args[4], args[3]);
+						} else {
+							if (nick.equals(args[2])) mode = postfix;
+						}
 						break;
 					case "NOTICE":
 						Console.out("NOTICE", postfix);
