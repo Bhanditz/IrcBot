@@ -11,4 +11,8 @@ public enum Usermode {
 		this.symbol = symbol;
 		this.value = value;
 	}
+	
+	public String toString() {
+		return ""+symbol;
+	}
 }

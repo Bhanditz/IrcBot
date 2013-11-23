@@ -97,11 +97,6 @@ public class IrcBot {
 	}
 
 	private static void act(String prefix, String[] args, String postfix) {
-/*		System.out.println("IrcBot:act prefix\t"+prefix);
-		System.out.print("IrcBot:act args");
-		for(String str : args) System.out.print("\t"+str);
-		System.out.println("\nIrcBot:act postfix\t"+postfix);*/
-		
 		String from = args[0];
 		String command_str = prefix;
 

@@ -18,6 +18,7 @@ public class Main {
 			Modules.install(new SayModule());
 			Modules.install(new ExitModule());
 			Modules.install(new NamesModule());
+			Modules.install(new HelpModule());
 
 //			bot.connect("open.ircnet.net", 6667);
 			IrcBot.connect("irc.freenode.net", 6667);
