@@ -1,9 +1,8 @@
 package IrcBot;
 
 public class ExitModule extends Module {
-	ExitModule(IrcBot bot, String name) {
-		this.bot = bot;
-		this.name = name;
+	ExitModule() {
+		this.name = "ExitModule";
 		this.commands.add("exit");
 		this.commands.add("die");
 		this.commands.add("leave");
@@ -12,6 +11,6 @@ public class ExitModule extends Module {
 
 	@Override
 	void run(Command command) {
-		this.bot.quit(command.args);
+		IrcBot.quit(command.args);
 	}
 }

@@ -1,11 +1,14 @@
 package IrcBot;
 
 public enum Usermode {
-	o('@'),
-	v('+');
+	o('@', 'o'),
+	v('+', 'v');
 	
-	private char value;
-	private Usermode(char value) {
+	public char symbol;
+	public char value;
+
+	private Usermode(char symbol, char value) {
+		this.symbol = symbol;
 		this.value = value;
 	}
 }

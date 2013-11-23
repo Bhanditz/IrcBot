@@ -12,19 +12,20 @@ public class Main {
 		
 
 		try {
-			IrcBot bot = new IrcBot(botConfig);
+			IrcBot.init(botConfig);
 			
 			Console.out("Initializing modules");
-			Modules.install(new SayModule(bot, "SayModule"));
-			Modules.install(new ExitModule(bot, "ExitModule"));
-			Modules.install(new NamesModule(bot, "NamesModule"));
+			Modules.install(new SayModule());
+			Modules.install(new ExitModule());
+			Modules.install(new NamesModule());
 
 //			bot.connect("open.ircnet.net", 6667);
-			bot.connect("irc.freenode.net", 6667);
-			bot.join("#narven_bot");
+			IrcBot.connect("irc.freenode.net", 6667);
+			IrcBot.join("#narven_bot");
 
-			Thread	   thread = new Thread(bot);
-			thread.start();
+//			Thread thread = new Thread(IrcBot);
+//			thread.start();
+			IrcBot.run();
 			
 		} catch(Exception e) {
 			Console.err("Main::main", e);

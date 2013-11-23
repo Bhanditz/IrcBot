@@ -12,27 +12,26 @@ import java.io.PrintWriter;
 
 import sun.org.mozilla.javascript.commonjs.module.ModuleScope;
 
-public class IrcBot implements Runnable {
-	private String nick = null;
-	private String realname = null;
-	private String username = null;
-	private String serverHost = null;
-	private int serverPort;
-	private Socket socket = null;
-	private String mode = null;
+public class IrcBot {
+	public static String nick = null;
+	public static String realname = null;
+	public static String username = null;
+	public static String serverHost = null;
+	public static int serverPort;
+	public static String mode = null;
+	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
+	public static LinkedBlockingQueue<String> outQueue = new LinkedBlockingQueue<String>(1000);
+	private static Socket socket = null;
+	private static PrintWriter out;
+	private static BufferedReader in;
 	
-	private HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
-	private LinkedBlockingQueue<String> outQueue = new LinkedBlockingQueue<String>(1000);
-	private PrintWriter out;
-	private BufferedReader in;
-	
-	private Thread outThread = new Thread() {
+	private static Thread outThread = new Thread() {
 		public void run() {
 			try {
 				OutputStream out = socket.getOutputStream();
 				while (true) {
 					String s = outQueue.take();
-					System.out.println(getIDName() + " >>> " + s);
+					System.out.println(IrcBot.getIDName() + " >>> " + s);
 					s = s.replace("\n", "").replace("\r", "");
 					s = s + "\r\n";
 					out.write(s.getBytes("UTF-8"));
@@ -46,39 +45,39 @@ public class IrcBot implements Runnable {
 		}
 	};
 	
-	public IrcBot(IrcBotConfig config) {
-		Console.out(toString(), "Creating IrcBot", config);
-		this.nick = config.nick;
-		this.realname = config.realname;
-		this.username = config.username;
+	public static void init(IrcBotConfig config) {
+		Console.out("IrcBot", "Creating IrcBot", config);
+		nick = config.nick;
+		realname = config.realname;
+		username = config.username;
 	}
 	
-	public boolean connect(String host, int port) throws IOException {
-		Console.out(this, "Connecting to "+host+":"+port);
-		this.serverHost = host;
-		this.serverPort = port;
+	public static boolean connect(String host, int port) throws IOException {
+		Console.out("IrcBot", "Connecting to "+host+":"+port);
+		serverHost = host;
+		serverPort = port;
 
-		this.socket = new Socket(host, port);
+		socket = new Socket(host, port);
 
-		this.out = new PrintWriter(this.socket.getOutputStream(), true);
-		this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), "UTF-8"));
+		out = new PrintWriter(socket.getOutputStream(), true);
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 		
 		return false;
 	}
-	public boolean connect(String host) throws IOException {
+	public static boolean connect(String host) throws IOException {
 		return connect(host, 6667);
 	}
 
-	public void sendRawString(String s) {
+	public static void sendRawString(String s) {
 		outQueue.add(s);
 	}
-	public void say(String channelName, String msg) {
+	public static void say(String channelName, String msg) {
 		sendRawString("PRIVMSG "+channelName+" :"+msg);
 	}
-	public void quit(String msg) {
+	public static void quit(String msg) {
 		synchronized(socket) {
 			try {
-				this.sendRawString("QUIT :"+msg);
+				sendRawString("QUIT :"+msg);
 				socket.close();
 			} catch(IOException e) {
 				Console.err("ircBot::quit", e);
@@ -86,18 +85,18 @@ public class IrcBot implements Runnable {
 		} 
 	}
 
-	public boolean join(String channel_str) {
-		Console.out(this, "Joinig to "+channel_str);
+	public static boolean join(String channel_str) {
+		Console.out("IrcBot", "Joinig to "+channel_str);
 		
-		if (this.channelMap.containsKey(channel_str)) return false;
+		if (channelMap.containsKey(channel_str)) return false;
 
 		Channel channel = new Channel(channel_str);
-		this.channelMap.put(channel_str, channel);
+		channelMap.put(channel_str, channel);
 		
 		return false;
 	}
 
-	private void act(String prefix, String[] args, String postfix) {
+	private static void act(String prefix, String[] args, String postfix) {
 /*		System.out.println("IrcBot:act prefix\t"+prefix);
 		System.out.print("IrcBot:act args");
 		for(String str : args) System.out.print("\t"+str);
@@ -117,16 +116,16 @@ public class IrcBot implements Runnable {
 				//TODO modules
 				switch(command_str) {
 					case "MODE":
-						this.mode = postfix;
+						mode = postfix;
 						break;
 					case "NOTICE":
 						Console.out("NOTICE", postfix);
 						break;
 					case "JOIN":
-						this.channelMap.get(args[2]).userJoin(args[0]);
+						channelMap.get(args[2]).userJoin(args[0]);
 						break;
 					case "PART":
-						this.channelMap.get(args[2]).userPart(args[0]);
+						channelMap.get(args[2]).userPart(args[0]);
 						break;
 					case "PRIVMSG":
 						if (postfix.startsWith("!")) {
@@ -136,19 +135,19 @@ public class IrcBot implements Runnable {
 								Console.out("Using module "+module.name);
 								module.run(command);
 							} else {
-								this.say(args[2], "No module using command "+command.command);
+								say(args[2], "No module using command "+command.command);
 							}
 						}
 						break;
 					case "353":
-						this.channelMap.get(args[4]).init(postfix);
+						channelMap.get(args[4]).init(postfix);
 						break;
 				}
 		}
 	}
 	
-	private void processLine(String line) {
-		System.out.println(this.toString() + " <<< " + line);
+	private static void processLine(String line) {
+		System.out.println("IrcBot <<< " + line);
 		
 		String[] parts = line.trim().split(":", 3);
 
@@ -171,17 +170,16 @@ public class IrcBot implements Runnable {
 		act(prefix, args, postfix);
 	}
 	
-	@Override
-	public void run() {
-		if (this.nick == null || this.username == null || this.realname == null) return;
+	public static void run() {
+		if (nick == null || username == null || realname == null) return;
 		
 		try {
 			outThread.start();
 	
-			sendRawString("NICK " + this.nick);
-			sendRawString("USER " + this.username + " 0 * :" + this.realname);
+			sendRawString("NICK " + nick);
+			sendRawString("USER " + username + " 0 * :" + realname);
 
-			for( Map.Entry<String, Channel> channel : this.channelMap.entrySet() ) {
+			for( Map.Entry<String, Channel> channel : channelMap.entrySet() ) {
 				sendRawString("JOIN " + channel.getValue().channelName);
 			}
 			
@@ -200,10 +198,10 @@ public class IrcBot implements Runnable {
 		}
 	}
 	
-	public String getIDName() {
-		return this.nick+"!"+this.username;
+	public static String getIDName() {
+		return nick+"!"+username;
 	}
 	public String toString() {
-		return getIDName();
+		return IrcBot.getIDName();
 	}
 }
