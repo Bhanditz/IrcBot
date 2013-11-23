@@ -11,7 +11,12 @@ public class SayModule extends Module {
 	}
 
 	@Override
-	public void run(Command command) {
+	public void runCommand(Command command) {
 		IrcBot.say(command.channel, command.args);
+	}
+	
+	@Override
+	public void runEventListener(String[] args, String postfix) {
+		
 	}
 }

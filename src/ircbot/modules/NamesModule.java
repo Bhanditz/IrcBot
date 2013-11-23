@@ -14,7 +14,7 @@ public class NamesModule extends Module {
 	}
 
 	@Override
-	public void run(Command command) {
+	public void runCommand(Command command) {
 		Channel channel = IrcBot.channelMap.get(command.channel);
 		if (channel != null) {
 			String userList = "";
@@ -27,5 +27,10 @@ public class NamesModule extends Module {
 		} else {
 			IrcBot.say(command.channel, "Invalid channel "+command.channel);
 		}
+	}
+	
+	@Override
+	public void runEventListener(String[] args, String postfix) {
+		
 	}
 }

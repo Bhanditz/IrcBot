@@ -13,7 +13,7 @@ public class HelpModule extends Module {
 	}
 
 	@Override
-	public void run(Command command) {
+	public void runCommand(Command command) {
 		if(command.args == "") {
 			IrcBot.say(command.channel, "Usage: !help (<module>|list)");
 		} else if(command.args.equals("list")) {
@@ -30,5 +30,10 @@ public class HelpModule extends Module {
 				IrcBot.say(command.channel, module.name +" - Komennot:"+commandList);
 			}
 		}
+	}
+	
+	@Override
+	public void runEventListener(String[] args, String postfix) {
+		
 	}
 }

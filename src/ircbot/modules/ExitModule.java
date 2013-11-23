@@ -13,7 +13,12 @@ public class ExitModule extends Module {
 	}
 
 	@Override
-	public void run(Command command) {
+	public void runCommand(Command command) {
 		IrcBot.quit(command.args);
+	}
+	
+	@Override
+	public void runEventListener(String[] args, String postfix) {
+		
 	}
 }

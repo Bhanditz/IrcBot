@@ -3,6 +3,7 @@ package ircbot;
 import ircbot.modules.Module;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.net.Socket;
@@ -111,6 +112,10 @@ public class IrcBot {
 				String[] parts = from.split("!");
 				if (parts.length>1) from = parts[0];
 				
+				if (Modules.ircReplyListenerMap.containsKey(command_str))
+					for(String modName : Modules.ircReplyListenerMap.get(command_str))
+						Modules.moduleMap.get(modName).runEventListener(args, postfix);
+				
 				switch(command_str) {
 					case "MODE":
 						if (Channel.isChannel(args[2]) && channelMap.containsKey(args[2])) {
@@ -134,7 +139,7 @@ public class IrcBot {
 							Command command = new Command(args, postfix);
 							if (module != null) {
 								Console.out("Using module "+module.name);
-								module.run(command);
+								module.runCommand(command);
 							} else {
 								say(args[2], "No module using command "+command.command);
 							}
