@@ -26,6 +26,12 @@ public class Modules {
 				ircReplyListenerMap.get(replyCommand).add(module.name);
 	}
 	
+	public static Module get(String moduleName) {
+		if (moduleMap.containsKey(moduleName))
+			return moduleMap.get(moduleName);
+		return null;
+	}
+	
 	public static Module getByCommand(String command_str) {
 		if (commandMap.containsKey(command_str)) {
 			return moduleMap.get(commandMap.get(command_str));
