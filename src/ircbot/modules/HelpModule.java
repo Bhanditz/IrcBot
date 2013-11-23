@@ -1,15 +1,19 @@
-package IrcBot;
+package ircbot.modules;
+
+import ircbot.Command;
+import ircbot.IrcBot;
+import ircbot.Modules;
 
 import java.util.Map;
 
 public class HelpModule extends Module {
-	HelpModule() {
+	public HelpModule() {
 		this.name = "HelpModule";
 		this.commands.add("help");
 	}
 
 	@Override
-	void run(Command command) {
+	public void run(Command command) {
 		if(command.args == "") {
 			IrcBot.say(command.channel, "Usage: !help (<module>|list)");
 		} else if(command.args.equals("list")) {

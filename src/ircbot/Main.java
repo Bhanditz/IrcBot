@@ -1,4 +1,6 @@
-package IrcBot;
+package ircbot;
+
+import ircbot.modules.*;
 
 import java.net.Socket;
 

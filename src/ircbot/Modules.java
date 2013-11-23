@@ -1,4 +1,6 @@
-package IrcBot;
+package ircbot;
+
+import ircbot.modules.Module;
 
 import java.util.ArrayList;
 import java.util.HashMap;

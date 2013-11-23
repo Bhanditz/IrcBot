@@ -1,4 +1,4 @@
-package IrcBot;
+package ircbot;
 
 public enum Channelmode {
 

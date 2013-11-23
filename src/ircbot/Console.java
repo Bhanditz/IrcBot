@@ -1,4 +1,4 @@
-package IrcBot;
+package ircbot;
 
 import java.util.Date;
 import java.util.ArrayList;

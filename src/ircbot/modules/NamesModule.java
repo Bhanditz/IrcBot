@@ -1,15 +1,20 @@
-package IrcBot;
+package ircbot.modules;
+
+import ircbot.Channel;
+import ircbot.Command;
+import ircbot.IrcBot;
+import ircbot.Usermode;
 
 import java.util.Map;
 
 public class NamesModule extends Module {
-	NamesModule() {
+	public NamesModule() {
 		this.name = "NamesModule";
 		this.commands.add("names");
 	}
 
 	@Override
-	void run(Command command) {
+	public void run(Command command) {
 		Channel channel = IrcBot.channelMap.get(command.channel);
 		if (channel != null) {
 			String userList = "";

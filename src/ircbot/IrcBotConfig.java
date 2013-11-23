@@ -1,4 +1,4 @@
-package IrcBot;
+package ircbot;
 
 public class IrcBotConfig {
 	public String nick = "IrcBot";

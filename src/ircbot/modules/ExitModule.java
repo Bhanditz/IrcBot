@@ -1,7 +1,10 @@
-package IrcBot;
+package ircbot.modules;
+
+import ircbot.Command;
+import ircbot.IrcBot;
 
 public class ExitModule extends Module {
-	ExitModule() {
+	public ExitModule() {
 		this.name = "ExitModule";
 		this.commands.add("exit");
 		this.commands.add("die");
@@ -10,7 +13,7 @@ public class ExitModule extends Module {
 	}
 
 	@Override
-	void run(Command command) {
+	public void run(Command command) {
 		IrcBot.quit(command.args);
 	}
 }

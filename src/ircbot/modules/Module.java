@@ -1,4 +1,7 @@
-package IrcBot;
+package ircbot.modules;
+
+import ircbot.Command;
+import ircbot.IrcBot;
 
 import java.util.ArrayList;
 
@@ -7,5 +10,5 @@ public abstract class Module {
 	public String name = null;
 	public IrcBot bot = null;
 	
-	abstract void run(Command command);
+	abstract public void run(Command command);
 }

@@ -1,4 +1,6 @@
-package IrcBot;
+package ircbot;
+
+import ircbot.modules.Module;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +11,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import sun.org.mozilla.javascript.commonjs.module.ModuleScope;
 
 public class IrcBot {
 	public static String nick = null;
@@ -108,7 +108,9 @@ public class IrcBot {
 				sendRawString("PONG :"+args[0]);
 				break;
 			default:
-				//TODO modules
+				String[] parts = from.split("!");
+				if (parts.length>1) from = parts[0];
+				
 				switch(command_str) {
 					case "MODE":
 						mode = postfix;
@@ -117,10 +119,10 @@ public class IrcBot {
 						Console.out("NOTICE", postfix);
 						break;
 					case "JOIN":
-						channelMap.get(args[2]).userJoin(args[0]);
+						channelMap.get(args[2]).userJoin(from);
 						break;
 					case "PART":
-						channelMap.get(args[2]).userPart(args[0]);
+						channelMap.get(args[2]).userPart(from);
 						break;
 					case "PRIVMSG":
 						if (postfix.startsWith("!")) {

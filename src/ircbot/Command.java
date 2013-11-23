@@ -1,4 +1,4 @@
-package IrcBot;
+package ircbot;
 
 public class Command {
 	public String command = null;

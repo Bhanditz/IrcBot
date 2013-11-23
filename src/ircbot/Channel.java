@@ -1,4 +1,4 @@
-package IrcBot;
+package ircbot;
 
 import java.util.HashMap;
 
@@ -28,10 +28,10 @@ public class Channel {
 	}
 	
 	public void userJoin(String user) {
-		
+		userMap.put(user, null);
 	}
 	
 	public void userPart(String user) {
-		
+		userMap.remove(user);
 	}
 }

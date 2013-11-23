@@ -1,14 +1,17 @@
-package IrcBot;
+package ircbot.modules;
+
+import ircbot.Command;
+import ircbot.IrcBot;
 
 public class SayModule extends Module {
-	SayModule() {
+	public SayModule() {
 		this.name = "SayModule";
 		this.commands.add("say");
 		this.commands.add("sano");
 	}
 
 	@Override
-	void run(Command command) {
+	public void run(Command command) {
 		IrcBot.say(command.channel, command.args);
 	}
 }
