@@ -24,9 +24,12 @@ public class Main {
 			Modules.install(new ExitModule());
 			Modules.install(new NamesModule());
 			Modules.install(new HelpModule());
-			Modules.install(new AutoOpModule());
 			Modules.install(new JoinModule());
 			Modules.install(new PartModule());
+
+			AutoOpModule autoOpModule = new AutoOpModule();
+			autoOpModule.addAutoOp("#narven_bot", "narven", "narven!(.*)@(.*)");
+			Modules.install(autoOpModule);
 
 			/*
 			 * IRCnet   : open.ircnet.net
