@@ -1,0 +1,4 @@
+IrcBot
+======
+
+Modular java ircbot
