@@ -25,6 +25,8 @@ public class Main {
 			Modules.install(new NamesModule());
 			Modules.install(new HelpModule());
 			Modules.install(new AutoOpModule());
+			Modules.install(new JoinModule());
+			Modules.install(new PartModule());
 
 			/*
 			 * IRCnet   : open.ircnet.net
@@ -32,7 +34,9 @@ public class Main {
 			 */
 			IrcBot.connect("irc.freenode.net", 6667);
 			IrcBot.join("#narven_bot");
+
 			IrcBot.run();
+
 			
 		} catch(Exception e) {
 			Console.err("Main::main", e);

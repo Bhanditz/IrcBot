@@ -62,7 +62,10 @@ public class IrcBot {
 
 		out = new PrintWriter(socket.getOutputStream(), true);
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-		
+
+		sendRawString("NICK " + nick);
+		sendRawString("USER " + username + " 0 * :" + realname);
+
 		return false;
 	}
 	public static boolean connect(String host) throws IOException {
@@ -86,9 +89,22 @@ public class IrcBot {
 		} 
 	}
 
+	public static boolean part(String channel_str) {
+		Console.out("IrcBot", "Parting to "+channel_str);
+
+		sendRawString("PART " + channel_str);
+
+		if (!channelMap.containsKey(channel_str)) return true;
+
+		channelMap.remove(channel_str);
+		
+		return false;
+	}
 	public static boolean join(String channel_str) {
 		Console.out("IrcBot", "Joinig to "+channel_str);
-		
+
+		sendRawString("JOIN " + channel_str);
+
 		if (channelMap.containsKey(channel_str)) return false;
 
 		Channel channel = new Channel(channel_str);
@@ -181,13 +197,6 @@ public class IrcBot {
 		
 		try {
 			outThread.start();
-	
-			sendRawString("NICK " + nick);
-			sendRawString("USER " + username + " 0 * :" + realname);
-
-			for( Map.Entry<String, Channel> channel : channelMap.entrySet() ) {
-				sendRawString("JOIN " + channel.getValue().channelName);
-			}
 			
 			String line;
 			while ((line = in.readLine()) != null) {
