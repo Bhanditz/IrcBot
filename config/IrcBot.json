@@ -1,0 +1,12 @@
+{
+	"modules": [
+		"SayModule",
+		"ExitModule",
+		"NamesModule",
+		"HelpModule",
+		"JoinModule",
+		"PartModule",
+		"DebugModule",
+		"AutoOpModule"
+	]
+}

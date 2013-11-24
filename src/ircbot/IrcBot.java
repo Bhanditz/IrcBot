@@ -157,7 +157,11 @@ public class IrcBot {
 								Console.out("Using module "+module.name);
 								module.runCommand(command);
 							} else {
-								say(args[2], "No module using command "+command.command);
+								// Laiskuuden siivittämänä ennen kuin jaksaa joka pötikästä moduulin tehdä
+								switch(postfix.substring(1).split(" ")[0]) {
+									default:
+										say(args[2], "No module using command "+command.command);
+								}
 							}
 						}
 						break;
