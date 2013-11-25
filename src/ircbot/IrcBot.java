@@ -23,8 +23,8 @@ public class IrcBot {
 	public static HashMap<String, Channel> channelMap = new HashMap<String, Channel>();
 	public static LinkedBlockingQueue<String> outQueue = new LinkedBlockingQueue<String>(1000);
 	private static Socket socket = null;
-	private static PrintWriter out;
-	private static BufferedReader in;
+	private static PrintWriter out = null;
+	private static BufferedReader in = null;
 	
 	private static Thread outThread = new Thread() {
 		public void run() {
@@ -32,7 +32,7 @@ public class IrcBot {
 				OutputStream out = socket.getOutputStream();
 				while (true) {
 					String s = outQueue.take();
-					System.out.println(IrcBot.getIDName() + " >>> " + s);
+					System.out.println("IrcBot >>> " + s);
 					s = s.replace("\n", "").replace("\r", "");
 					s = s + "\r\n";
 					out.write(s.getBytes("UTF-8"));
@@ -121,7 +121,6 @@ public class IrcBot {
 		
 		switch(prefix) {
 			case "PING":
-				Console.out("Answering to PING");
 				sendRawString("PONG :"+args[0]);
 				break;
 			default:
@@ -197,7 +196,7 @@ public class IrcBot {
 	}
 	
 	public static void run() {
-		if (nick == null || username == null || realname == null) return;
+		if (nick == null || username == null || realname == null || in == null || out == null) return;
 		
 		try {
 			outThread.start();

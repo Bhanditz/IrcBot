@@ -14,7 +14,6 @@ public class Channel {
 	}
 	
 	public void init(String userList) {
-		Console.out("Initializing channel "+channelName);
 		String[] list = userList.split(" ");
 		Usermode mode;
 		for(String user : list) {
@@ -22,7 +21,6 @@ public class Channel {
 			if (user.startsWith("@"))      mode = Usermode.o;
 			else if (user.startsWith("+")) mode = Usermode.v;
 			if (mode != null) user = user.substring(1);
-			Console.out("user: ", mode==null?"null":mode, user);
 			userMap.put(user, mode);
 		}
 	}

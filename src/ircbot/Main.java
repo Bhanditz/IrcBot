@@ -51,19 +51,6 @@ public class Main {
 			}
 			Modules.loadAll();
 				
-/*			Modules.install(new SayModule());
-			Modules.install(new ExitModule());
-			Modules.install(new NamesModule());
-			Modules.install(new HelpModule());
-			Modules.install(new JoinModule());
-			Modules.install(new PartModule());
-			Modules.install(new DebugModule());
-
-			// TODO: lataa asetuksista
-			AutoOpModule autoOpModule = new AutoOpModule();
-			autoOpModule.addAutoOp("#narven_bot", "narven", "narven!(.*)@(.*)");
-			Modules.install(autoOpModule);*/
-
 			IrcBot.connect(serverHost, serverPort);
 			IrcBot.join(channel);
 

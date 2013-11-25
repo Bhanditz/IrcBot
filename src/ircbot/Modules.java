@@ -13,11 +13,7 @@ public class Modules {
 	public static HashMap<String, String> commandMap = new HashMap<String, String>();
 	public static HashMap<String, ArrayList<String>> ircReplyListenerMap = new HashMap<String, ArrayList<String>>();
 
-	public static void init() {
-		ircReplyListenerMap.put("MODE", new ArrayList<String>());
-		ircReplyListenerMap.put("JOIN", new ArrayList<String>());
-		ircReplyListenerMap.put("PRIVMSG", new ArrayList<String>());
-	}
+	public static void init() { }
 
 	public static void install(Module module) {
 		if (module == null) return;
@@ -34,12 +30,16 @@ public class Modules {
 		for(String command : module.commands)
 			commandMap.put(command, module.name);
 
-		for(String replyCommand : module.ircReplyListeners)
-			if (ircReplyListenerMap.containsKey(replyCommand))
-				ircReplyListenerMap.get(replyCommand).add(module.name);
+		for(String replyCommand : module.ircReplyListeners) {
+			if (!ircReplyListenerMap.containsKey(replyCommand))
+				ircReplyListenerMap.put(replyCommand, new ArrayList<String>());
+
+			ircReplyListenerMap.get(replyCommand).add(module.name);
+		}
 	}
 	public static void loadAll() {
-		for(Map.Entry<String, Module> entry : moduleMap.entrySet()) load(entry.getKey());
+		for(Map.Entry<String, Module> entry : moduleMap.entrySet())
+			load(entry.getKey());
 	}
 
 	public static void install(String moduleName) {
@@ -54,7 +54,8 @@ public class Modules {
 		if (!moduleMap.containsKey(moduleName)) return;
 		
 		for(Map.Entry<String, String> entry : commandMap.entrySet())
-			if (entry.getValue().equals(moduleName)) commandMap.remove(entry.getKey());
+			if (entry.getValue().equals(moduleName))
+				commandMap.remove(entry.getKey());
 			
 		for(Map.Entry<String, ArrayList<String>> listEntry : ircReplyListenerMap.entrySet())
 			for(int i = 0; i < listEntry.getValue().size(); i++)
